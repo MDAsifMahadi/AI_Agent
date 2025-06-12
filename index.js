@@ -4,8 +4,7 @@ import cors from "cors";
 import {config} from "dotenv";
 import mongoose from 'mongoose';
 import {Server} from "socket.io"
-import { getMessagesHandler, postMessagesHandler} from "./handlers/messagesHandler.js";
-import { chackUserValidity } from "./middlewares/chackUsersValidity.js";
+
 import { socketHandler } from "./point/socketHandler.js";
 config();
 const app = express();
@@ -15,7 +14,8 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 4001;
 const io = new Server(server, {
     cors : {
-        origin : "*"
+        origin : "*",
+        methods : ["GET", "POST"]
     }
 })
 const connectDB = async () => {
@@ -31,8 +31,5 @@ connectDB();
 io.on("connection", socket => {
     socketHandler(socket, io);
 })
-
-app.get("/messages",chackUserValidity, getMessagesHandler);
-app.post("/messages",chackUserValidity, postMessagesHandler);
 
 server.listen(PORT, () => console.log(`server is runing in http://localhost:${PORT}`));
