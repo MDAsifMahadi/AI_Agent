@@ -28,6 +28,10 @@ const connectDB = async () => {
 }
 connectDB();
 
+app.get("/", (req, res) => {
+    res.send("ping");
+})
+
 io.on("connection", socket => {
     socketHandler(socket, io);
 })
